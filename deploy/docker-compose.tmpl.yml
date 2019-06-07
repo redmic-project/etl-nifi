@@ -19,7 +19,6 @@ services:
       - nifi-content-vol:${NIFI_HOME}/content_repository
       - nifi-provenance-vol:${NIFI_HOME}/provenance_repository
       - nifi-state-vol:${NIFI_HOME}/state
-      - nifi-additional-libs-vol:${NIFI_HOME}/additional-libs
       - ingest-data-vol:${NIFI_HOME}/data
     configs:
       - source: logback-xml
