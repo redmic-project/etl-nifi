@@ -35,11 +35,14 @@ services:
         delay: 10s
         window: 2m
       labels:
-        traefik.frontend.auth.basic.users: ${UI_AUTH}
-        traefik.frontend.rule: Host:nifi.${PUBLIC_HOSTNAME}
-        traefik.frontend.headers.customRequestHeaders: X-ProxyScheme:https||X-ProxyHost:nifi.${PUBLIC_HOSTNAME}||X-ProxyPort:443
-        traefik.backend: nifi
-        traefik.port: '${PORT}'
+        traefik.http.routers.nifi.entrypoints: https
+        traefik.http.routers.nifi.rule: Host(`${SITE_SUBDOMAIN:-nifi}.${PUBLIC_HOSTNAME}`)
+        traefik.http.services.nifi.loadbalancer.server.port: '${PORT}'
+        traefik.http.routers.nifi.tls.certresolver: default
+        traefik.http.middlewares.nifi-auth.basicauth.users: ${UI_AUTH}
+        traefik.http.middlewares.nifi-headers.headers.customrequestheaders.X-ProxyScheme: https
+        traefik.http.middlewares.nifi-headers.headers.customrequestheaders.X-ProxyHost: ${SITE_SUBDOMAIN:-nifi}.${PUBLIC_HOSTNAME}
+        traefik.http.middlewares.nifi-headers.headers.customrequestheaders.X-ProxyPort: X-ProxyPort:443
 
 networks:
   traefik-net:
