@@ -43,7 +43,6 @@ services:
         traefik.http.middlewares.nifi-headers.headers.customrequestheaders.X-ProxyScheme: https
         traefik.http.middlewares.nifi-headers.headers.customrequestheaders.X-ProxyHost: ${SITE_SUBDOMAIN:-nifi}.${PUBLIC_HOSTNAME}
         traefik.http.middlewares.nifi-headers.headers.customrequestheaders.X-ProxyPort: X-ProxyPort:443
-        traefik.http.routers.nifi.middlewares: nifi-auth,nifi-headers
 
 networks:
   traefik-net:
