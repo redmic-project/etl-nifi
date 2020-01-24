@@ -56,12 +56,6 @@ volumes:
   nifi-state-vol:
     name: ${NIFI_STATE_VOL_NAME:-nifi-state-vol}
 
-configs:
-  logback-xml:
-    name: ${LOGBACK_XML_NAME:-nifi-logback-xml}
-    file: ./config/logback.xml
-
-volumes:
   nifi-conf-vol:
     name: ${NIFI_CONF_VOL_NAME:-nifi-conf-vol}
 
@@ -79,3 +73,8 @@ volumes:
 
   ingest-data-vol:
     name: ${INGEST_DATA_VOL_NAME:-ingest-data-vol}
+
+configs:
+  logback-xml:
+    name: ${LOGBACK_XML_NAME:-nifi-logback-xml}
+    file: ./config/logback.xml
