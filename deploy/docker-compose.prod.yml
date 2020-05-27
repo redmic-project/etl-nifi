@@ -8,50 +8,49 @@ services:
           - node.role == worker
       resources:
         limits:
-          cpus: '1'
-          memory: 2G
+          cpus: '${RESOURCES_LIMITS_CPUS:-1}'
+          memory: ${RESOURCES_LIMITS_MEMORY:-2G}
         reservations:
-          cpus: '0.2'
-          memory: 1639M
+          cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.2}'
+          memory: ${RESOURCES_RESERVATIONS_MEMORY:-1639M}
 
 volumes:
-  nifi-conf-vol:
-    name: ${NIFI_CONF_VOL_NAME:-nifi-conf-vol}
+  conf-vol:
+    name: ${CONF_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: shared
 
-  nifi-database-vol:
-    name: ${NIFI_DATABASE_VOL_NAME:-nifi-database-vol}
+  database-vol:
+    name: ${DATABASE_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: shared
 
-  nifi-flowfile-vol:
-    name: ${NIFI_FLOWFILE_VOL_NAME:-nifi-flowfile-vol}
+  flowfile-vol:
+    name: ${FLOWFILE_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: shared
 
-  nifi-content-vol:
-    name: ${NIFI_CONTENT_VOL_NAME:-nifi-content-vol}
+  content-vol:
+    name: ${CONTENT_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: relocatable
-      size: 1
+      size: ${CONTENT_VOL_SIZE:-1}
       ebstype: gp2
 
-  nifi-provenance-vol:
-    name: ${NIFI_PROVENANCE_VOL_NAME:-nifi-provenance-vol}
+  provenance-vol:
+    name: ${PROVENANCE_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: relocatable
-      size: 2
+      size: ${PROVENANCE_VOL_SIZE:-2}
       ebstype: gp2
 
-  ingest-data-vol:
-    name: ${INGEST_DATA_VOL_NAME:-ingest-data-vol}
+  ingest-vol:
+    name: ${INGEST_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: shared
-

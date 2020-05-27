@@ -3,29 +3,32 @@ version: '3.5'
 services:
   nifi:
     deploy:
+      placement:
+        constraints:
+          - node.hostname == ${PLACEMENT_CONSTRAINTS_NODE_HOSTNAME:-hostname}
       resources:
         limits:
-          cpus: '1'
-          memory: 1G
+          cpus: '${RESOURCES_LIMITS_CPUS:-1}'
+          memory: ${RESOURCES_LIMITS_MEMORY:-1G}
         reservations:
-          cpus: '0.2'
-          memory: 820M
+          cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.2}'
+          memory: ${RESOURCES_RESERVATIONS_MEMORY:-820M}
 
 volumes:
-  nifi-conf-vol:
-    name: ${NIFI_CONF_VOL_NAME:-nifi-conf-vol}
+  conf-vol:
+    name: ${CONF_VOL_NAME}
 
-  nifi-database-vol:
-    name: ${NIFI_DATABASE_VOL_NAME:-nifi-database-vol}
+  database-vol:
+    name: ${DATABASE_VOL_NAME}
 
-  nifi-flowfile-vol:
-    name: ${NIFI_FLOWFILE_VOL_NAME:-nifi-flowfile-vol}
+  flowfile-vol:
+    name: ${FLOWFILE_VOL_NAME}
 
-  nifi-content-vol:
-    name: ${NIFI_CONTENT_VOL_NAME:-nifi-content-vol}
+  content-vol:
+    name: ${CONTENT_VOL_NAME}
 
-  nifi-provenance-vol:
-    name: ${NIFI_PROVENANCE_VOL_NAME:-nifi-provenance-vol}
+  provenance-vol:
+    name: ${PROVENANCE_VOL_NAME}
 
-  ingest-data-vol:
-    name: ${INGEST_DATA_VOL_NAME:-ingest-data-vol}
+  ingest-vol:
+    name: ${INGEST_VOL_NAME}
