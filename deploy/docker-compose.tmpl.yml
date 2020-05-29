@@ -6,6 +6,8 @@ services:
     environment:
       HOME: ${NIFI_HOME}/conf
       NIFI_WEB_PROXY_HOST: ${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}:${NIFI_WEB_HTTPS_PORT}
+      TRUSTSTORE_PATH: ${NIFI_HOME}/security/truststore.p12
+      KEYSTORE_PATH: ${NIFI_HOME}/security/keystore.p12
       NIFI_HOME:
       INITIAL_ADMIN_IDENTITY:
       LDAP_AUTHENTICATION_STRATEGY:
@@ -15,11 +17,9 @@ services:
       LDAP_USER_SEARCH_FILTER:
       LDAP_IDENTITY_STRATEGY:
       LDAP_URL:
-      KEYSTORE_PATH:
       KEYSTORE_TYPE:
       KEYSTORE_PASSWORD:
       KEY_PASSWORD:
-      TRUSTSTORE_PATH:
       TRUSTSTORE_PASSWORD:
       TRUSTSTORE_TYPE:
       AUTH:
@@ -38,14 +38,11 @@ services:
       - content-vol:${NIFI_HOME}/content_repository
       - provenance-vol:${NIFI_HOME}/provenance_repository
       - state-vol:${NIFI_HOME}/state
+      - security-vol:${NIFI_HOME}/security
       - ingest-vol:${NIFI_HOME}/data
     configs:
       - source: logback-xml
         target: ${NIFI_HOME}/conf/logback.xml
-      - source: truststore-p12
-        target: ${TRUSTSTORE_PATH}
-      - source: keystore-p12
-        target: ${KEYSTORE_PATH}
     healthcheck:
       test: curl --silent --output /dev/null --insecure https://localhost:${NIFI_WEB_HTTPS_PORT}/nifi
       interval: ${HEALTHCHECK_INTERVAL:-30s}
@@ -94,15 +91,10 @@ volumes:
   state-vol:
     name: ${STATE_VOL_NAME:-nifi-state-vol}
 
+  security-vol:
+    name: ${SECURITY_VOL_NAME:-nifi-security-vol}
+
 configs:
   logback-xml:
     name: ${LOGBACK_XML_NAME:-nifi-logback-xml}
     file: ./config/logback.xml
-
-  truststore-p12:
-    name: ${TRUSTSTORE_P12_NAME:-nifi-truststore-p12}
-    file: ./config/truststore.p12
-
-  keystore-p12:
-    name: ${KEYSTORE_P12_NAME:-nifi-keystore-p12}
-    file: ./config/keystore.p12

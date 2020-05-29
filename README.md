@@ -30,3 +30,7 @@ You can check stores content with:
 keytool -list -v -keystore keystore.p12
 keytool -list -v -keystore truststore.p12
 ```
+
+## Adding truststore/keystore to volume
+
+When deploying at first time, you must copy generated stores to `${SECURITY_VOL_NAME}` volume (at root level). NiFi needs these files at startup.
