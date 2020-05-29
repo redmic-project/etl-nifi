@@ -5,6 +5,7 @@ services:
     image: ${IMAGE_NAME:-apache/nifi}:${IMAGE_TAG:-latest}
     environment:
       HOME: ${NIFI_HOME}/conf
+      NIFI_WEB_PROXY_HOST: ${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}:${NIFI_WEB_HTTPS_PORT}
       NIFI_HOME:
       INITIAL_ADMIN_IDENTITY:
       LDAP_AUTHENTICATION_STRATEGY:
@@ -24,7 +25,6 @@ services:
       AUTH:
       NIFI_WEB_HTTPS_HOST:
       NIFI_WEB_HTTPS_PORT:
-      NIFI_WEB_PROXY_HOST:
     networks:
       traefik-net:
       kafka-net:
