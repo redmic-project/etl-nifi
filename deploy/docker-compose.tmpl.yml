@@ -5,7 +5,7 @@ services:
     image: ${IMAGE_NAME:-apache/nifi}:${IMAGE_TAG:-latest}
     environment:
       HOME: ${NIFI_HOME}/conf
-      NIFI_WEB_PROXY_HOST: ${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}:${NIFI_WEB_HTTPS_PORT}
+      NIFI_WEB_PROXY_HOST: ${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}:443
       TRUSTSTORE_PATH: ${NIFI_HOME}/security/truststore.p12
       KEYSTORE_PATH: ${NIFI_HOME}/security/keystore.p12
       NIFI_HOME:
