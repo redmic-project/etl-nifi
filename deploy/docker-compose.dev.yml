@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+  nifi:
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == ${PLACEMENT_CONSTRAINTS_NODE_HOSTNAME:-hostname}
+      resources:
+        limits:
+          cpus: '${RESOURCES_LIMITS_CPUS:-1}'
+          memory: ${RESOURCES_LIMITS_MEMORY:-1G}
+        reservations:
+          cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.2}'
+          memory: ${RESOURCES_RESERVATIONS_MEMORY:-820M}
+
+volumes:
+  conf-vol:
+    name: ${CONF_VOL_NAME}
+
+  database-vol:
+    name: ${DATABASE_VOL_NAME}
+
+  flowfile-vol:
+    name: ${FLOWFILE_VOL_NAME}
+
+  content-vol:
+    name: ${CONTENT_VOL_NAME}
+
+  provenance-vol:
+    name: ${PROVENANCE_VOL_NAME}
+
+  ingest-vol:
+    name: ${INGEST_VOL_NAME}

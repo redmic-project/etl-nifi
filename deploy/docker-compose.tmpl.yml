@@ -1,0 +1,100 @@
+version: '3.5'
+
+services:
+  nifi:
+    image: ${IMAGE_NAME:-apache/nifi}:${IMAGE_TAG:-latest}
+    environment:
+      HOME: ${NIFI_HOME}/conf
+      NIFI_WEB_PROXY_HOST: ${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}:443
+      TRUSTSTORE_PATH: ${NIFI_HOME}/security/truststore.p12
+      KEYSTORE_PATH: ${NIFI_HOME}/security/keystore.p12
+      NIFI_HOME:
+      INITIAL_ADMIN_IDENTITY:
+      LDAP_AUTHENTICATION_STRATEGY:
+      LDAP_MANAGER_DN:
+      LDAP_MANAGER_PASSWORD:
+      LDAP_USER_SEARCH_BASE:
+      LDAP_USER_SEARCH_FILTER:
+      LDAP_IDENTITY_STRATEGY:
+      LDAP_URL:
+      KEYSTORE_TYPE:
+      KEYSTORE_PASSWORD:
+      KEY_PASSWORD:
+      TRUSTSTORE_PASSWORD:
+      TRUSTSTORE_TYPE:
+      AUTH:
+      NIFI_WEB_HTTPS_HOST:
+      NIFI_WEB_HTTPS_PORT:
+    networks:
+      traefik-net:
+      kafka-net:
+      elastic-net:
+      auth-net:
+    volumes:
+      - log-vol:${NIFI_HOME}/logs
+      - conf-vol:${NIFI_HOME}/conf
+      - database-vol:${NIFI_HOME}/database_repository
+      - flowfile-vol:${NIFI_HOME}/flowfile_repository
+      - content-vol:${NIFI_HOME}/content_repository
+      - provenance-vol:${NIFI_HOME}/provenance_repository
+      - state-vol:${NIFI_HOME}/state
+      - security-vol:${NIFI_HOME}/security
+      - ingest-vol:${NIFI_HOME}/data
+    configs:
+      - source: logback-xml
+        target: ${NIFI_HOME}/conf/logback.xml
+    healthcheck:
+      test: curl --silent --output /dev/null --insecure https://localhost:${NIFI_WEB_HTTPS_PORT}/nifi
+      interval: ${HEALTHCHECK_INTERVAL:-30s}
+      timeout: ${HEALTHCHECK_TIMEOUT:-15s}
+      retries: ${HEALTHCHECK_RETRIES:-10}
+      start_period: ${HEALTHCHECK_START_PERIOD:-5m}
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        delay: ${RESTART_DELAY:-10s}
+      update_config:
+        delay: ${UPDATE_DELAY:-10m}
+      labels:
+        traefik.frontend.rule: Host:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}
+        traefik.frontend.headers.customRequestHeaders: X-ProxyScheme:https||X-ProxyHost:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}||X-ProxyPort:443||X-ProxyContextPath:/
+        traefik.backend: nifi
+        traefik.protocol: https
+        traefik.port: '${NIFI_WEB_HTTPS_PORT}'
+
+networks:
+  traefik-net:
+    name: ${TRAEFIK_NET_NAME:-traefik-net}
+    driver: ${TRAEFIK_NET_DRIVER:-overlay}
+    external: true
+
+  kafka-net:
+    name: ${KAFKA_NET_NAME:-kafka-net}
+    driver: ${KAFKA_NET_DRIVER:-overlay}
+    external: true
+
+  elastic-net:
+    name: ${ELASTIC_NET_NAME:-elastic6-net}
+    driver: ${ELASTIC_NET_DRIVER:-overlay}
+    external: true
+
+  auth-net:
+    name: ${AUTH_NET_NAME:-auth-net}
+    driver: ${AUTH_NET_DRIVER:-overlay}
+    external: true
+
+volumes:
+  log-vol:
+    name: ${LOG_VOL_NAME:-nifi-log-vol}
+
+  state-vol:
+    name: ${STATE_VOL_NAME:-nifi-state-vol}
+
+  security-vol:
+    name: ${SECURITY_VOL_NAME:-nifi-security-vol}
+
+configs:
+  logback-xml:
+    name: ${LOGBACK_XML_NAME:-nifi-logback-xml}
+    file: ./config/logback.xml

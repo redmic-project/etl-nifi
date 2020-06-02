@@ -1,0 +1,56 @@
+version: '3.5'
+
+services:
+  nifi:
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+      resources:
+        limits:
+          cpus: '${RESOURCES_LIMITS_CPUS:-1}'
+          memory: ${RESOURCES_LIMITS_MEMORY:-2G}
+        reservations:
+          cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.2}'
+          memory: ${RESOURCES_RESERVATIONS_MEMORY:-1639M}
+
+volumes:
+  conf-vol:
+    name: ${CONF_VOL_NAME}
+    driver: 'cloudstor:aws'
+    driver_opts:
+      backing: shared
+
+  database-vol:
+    name: ${DATABASE_VOL_NAME}
+    driver: 'cloudstor:aws'
+    driver_opts:
+      backing: shared
+
+  flowfile-vol:
+    name: ${FLOWFILE_VOL_NAME}
+    driver: 'cloudstor:aws'
+    driver_opts:
+      backing: shared
+
+  content-vol:
+    name: ${CONTENT_VOL_NAME}
+    driver: 'cloudstor:aws'
+    driver_opts:
+      backing: relocatable
+      size: ${CONTENT_VOL_SIZE:-1}
+      ebstype: gp2
+
+  provenance-vol:
+    name: ${PROVENANCE_VOL_NAME}
+    driver: 'cloudstor:aws'
+    driver_opts:
+      backing: relocatable
+      size: ${PROVENANCE_VOL_SIZE:-2}
+      ebstype: gp2
+
+  ingest-vol:
+    name: ${INGEST_VOL_NAME}
+    driver: 'cloudstor:aws'
+    driver_opts:
+      backing: shared
