@@ -79,6 +79,11 @@ networks:
     driver: ${ELASTIC_NET_DRIVER:-overlay}
     external: true
 
+  postgres-net:
+    name: ${POSTGRES_NET_NAME}
+    driver: ${POSTGRES_NET_DRIVER:-overlay}
+    external: true
+
   auth-net:
     name: ${AUTH_NET_NAME:-auth-net}
     driver: ${AUTH_NET_DRIVER:-overlay}
