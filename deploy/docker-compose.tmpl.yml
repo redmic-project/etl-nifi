@@ -80,7 +80,7 @@ networks:
     external: true
 
   postgres-net:
-    name: ${POSTGRES_NET_NAME}
+    name: ${POSTGRES_NET_NAME:-postgres-net}
     driver: ${POSTGRES_NET_DRIVER:-overlay}
     external: true
 
