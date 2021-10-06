@@ -34,3 +34,15 @@ keytool -list -v -keystore truststore.p12
 ## Adding truststore/keystore to volume
 
 When deploying at first time, you must copy generated stores to `${SECURITY_VOL_NAME}` volume (at root level). NiFi needs these files at startup.
+
+## Adding external service certificate
+
+In processes like `invokeHttp`, if you wish to access to an external service through HTTPS where a certificate is mandatory, you must add it to NiFi's truststore, using these commands:
+
+```sh
+echo -n | openssl s_client -connect external_url:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/external_name.crt
+
+keytool -import -alias external_name -file /tmp/external_name.crt -keystore truststore.p12
+
+rm tmp/external_name.crt
+```
