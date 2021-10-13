@@ -29,6 +29,7 @@ services:
       traefik-net:
       kafka-net:
       elastic-net:
+      postgres-net:
       auth-net:
     volumes:
       - log-vol:${NIFI_HOME}/logs
@@ -59,6 +60,9 @@ services:
       labels:
         traefik.frontend.rule: Host:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}
         traefik.frontend.headers.customRequestHeaders: X-ProxyScheme:https||X-ProxyHost:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}||X-ProxyPort:443||X-ProxyContextPath:/
+        traefik.frontend.redirect.regex: ^(.*://${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME})/$$
+        traefik.frontend.redirect.replacement: $$1/nifi
+        traefik.frontend.redirect.permanent: 'true'
         traefik.backend: nifi
         traefik.protocol: https
         traefik.port: '${NIFI_WEB_HTTPS_PORT}'
@@ -77,6 +81,11 @@ networks:
   elastic-net:
     name: ${ELASTIC_NET_NAME:-elastic6-net}
     driver: ${ELASTIC_NET_DRIVER:-overlay}
+    external: true
+
+  postgres-net:
+    name: ${POSTGRES_NET_NAME:-postgres-net}
+    driver: ${POSTGRES_NET_DRIVER:-overlay}
     external: true
 
   auth-net:
