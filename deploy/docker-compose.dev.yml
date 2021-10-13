@@ -32,3 +32,6 @@ volumes:
 
   ingest-vol:
     name: ${INGEST_VOL_NAME}
+
+  security-vol:
+    name: ${SECURITY_VOL_NAME}
