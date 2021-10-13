@@ -54,3 +54,9 @@ volumes:
     driver: 'cloudstor:aws'
     driver_opts:
       backing: shared
+
+  security-vol:
+    name: ${SECURITY_VOL_NAME}
+    driver: 'cloudstor:aws'
+    driver_opts:
+      backing: shared

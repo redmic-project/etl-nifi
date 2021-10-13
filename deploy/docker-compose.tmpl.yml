@@ -100,9 +100,6 @@ volumes:
   state-vol:
     name: ${STATE_VOL_NAME:-nifi-state-vol}
 
-  security-vol:
-    name: ${SECURITY_VOL_NAME:-nifi-security-vol}
-
 configs:
   logback-xml:
     name: ${LOGBACK_XML_NAME:-nifi-logback-xml}
