@@ -6,13 +6,6 @@ services:
       placement:
         constraints:
           - node.role == worker
-      resources:
-        limits:
-          cpus: '${RESOURCES_LIMITS_CPUS:-1}'
-          memory: ${RESOURCES_LIMITS_MEMORY:-2G}
-        reservations:
-          cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.2}'
-          memory: ${RESOURCES_RESERVATIONS_MEMORY:-1639M}
 
 volumes:
   conf-vol:

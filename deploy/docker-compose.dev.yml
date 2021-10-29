@@ -6,13 +6,6 @@ services:
       placement:
         constraints:
           - node.hostname == ${PLACEMENT_CONSTRAINTS_NODE_HOSTNAME:-hostname}
-      resources:
-        limits:
-          cpus: '${RESOURCES_LIMITS_CPUS:-1}'
-          memory: ${RESOURCES_LIMITS_MEMORY:-1G}
-        reservations:
-          cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.2}'
-          memory: ${RESOURCES_RESERVATIONS_MEMORY:-820M}
 
 volumes:
   conf-vol:
