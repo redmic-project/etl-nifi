@@ -25,6 +25,8 @@ services:
       AUTH:
       NIFI_WEB_HTTPS_HOST:
       NIFI_WEB_HTTPS_PORT:
+      NIFI_JVM_HEAP_INIT:
+      NIFI_JVM_HEAP_MAX:
     networks:
       traefik-net:
       kafka-net:
@@ -57,6 +59,13 @@ services:
         delay: ${RESTART_DELAY:-10s}
       update_config:
         delay: ${UPDATE_DELAY:-10m}
+      resources:
+        limits:
+          cpus: '${RESOURCES_LIMITS_CPUS:-2}'
+          memory: ${RESOURCES_LIMITS_MEMORY:-5G}
+        reservations:
+          cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.2}'
+          memory: ${RESOURCES_RESERVATIONS_MEMORY:-3G}
       labels:
         traefik.frontend.rule: Host:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}
         traefik.frontend.headers.customRequestHeaders: X-ProxyScheme:https||X-ProxyHost:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}||X-ProxyPort:443||X-ProxyContextPath:/
