@@ -106,9 +106,6 @@ volumes:
   log-vol:
     name: ${LOG_VOL_NAME:-nifi-log-vol}
 
-  state-vol:
-    name: ${STATE_VOL_NAME:-nifi-state-vol}
-
 configs:
   logback-xml:
     name: ${LOGBACK_XML_NAME:-nifi-logback-xml}

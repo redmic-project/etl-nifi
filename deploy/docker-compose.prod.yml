@@ -24,32 +24,40 @@ volumes:
     name: ${FLOWFILE_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
-      backing: shared
+      backing: relocatable
+      size: ${FLOWFILE_VOL_SIZE:-1}
+      ebstype: gp3
 
   content-vol:
     name: ${CONTENT_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: relocatable
-      size: ${CONTENT_VOL_SIZE:-1}
-      ebstype: gp2
+      size: ${CONTENT_VOL_SIZE:-5}
+      ebstype: gp3
 
   provenance-vol:
     name: ${PROVENANCE_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: relocatable
-      size: ${PROVENANCE_VOL_SIZE:-2}
-      ebstype: gp2
+      size: ${PROVENANCE_VOL_SIZE:-1}
+      ebstype: gp3
 
-  ingest-vol:
-    name: ${INGEST_VOL_NAME}
+  state-vol:
+    name: ${STATE_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: shared
 
   security-vol:
     name: ${SECURITY_VOL_NAME}
+    driver: 'cloudstor:aws'
+    driver_opts:
+      backing: shared
+
+  ingest-vol:
+    name: ${INGEST_VOL_NAME}
     driver: 'cloudstor:aws'
     driver_opts:
       backing: shared
