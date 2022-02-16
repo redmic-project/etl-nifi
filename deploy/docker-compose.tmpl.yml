@@ -42,7 +42,6 @@ services:
       - provenance-vol:${NIFI_HOME}/provenance_repository
       - state-vol:${NIFI_HOME}/state
       - security-vol:${NIFI_HOME}/security
-      - ingest-vol:${NIFI_HOME}/data
     configs:
       - source: logback-xml
         target: ${NIFI_HOME}/conf/logback.xml

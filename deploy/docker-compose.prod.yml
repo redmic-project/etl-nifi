@@ -55,9 +55,3 @@ volumes:
     driver: 'cloudstor:aws'
     driver_opts:
       backing: shared
-
-  ingest-vol:
-    name: ${INGEST_VOL_NAME}
-    driver: 'cloudstor:aws'
-    driver_opts:
-      backing: shared

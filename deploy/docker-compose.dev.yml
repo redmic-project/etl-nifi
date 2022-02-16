@@ -56,11 +56,3 @@ volumes:
       type: ${VOL_TYPE}
       o: addr=${VOL_ADDR},${VOL_OPTIONS}
       device: ${SECURITY_VOL_DEVICE:-:/nifi-security-vol/}
-
-  ingest-vol:
-    name: ${INGEST_VOL_NAME}
-    driver: local
-    driver_opts:
-      type: ${VOL_TYPE}
-      o: addr=${VOL_ADDR},${VOL_OPTIONS}
-      device: ${INGEST_VOL_DEVICE:-:/nifi-ingest-vol/}
