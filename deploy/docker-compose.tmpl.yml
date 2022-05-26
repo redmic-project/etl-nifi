@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.9'
 
 services:
   nifi:
@@ -6,8 +6,8 @@ services:
     environment:
       HOME: ${NIFI_HOME}/conf
       NIFI_WEB_PROXY_HOST: ${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}:443
-      TRUSTSTORE_PATH: ${NIFI_HOME}/security/truststore.jks
-      KEYSTORE_PATH: ${NIFI_HOME}/security/keystore.jks
+      TRUSTSTORE_PATH: ${NIFI_HOME}/security/nifi/truststore.jks
+      KEYSTORE_PATH: ${NIFI_HOME}/security/nifi/keystore.jks
       NIFI_HOME:
       INITIAL_ADMIN_IDENTITY:
       LDAP_AUTHENTICATION_STRATEGY:
