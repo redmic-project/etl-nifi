@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.9'
 
 services:
   nifi:
@@ -6,8 +6,8 @@ services:
     environment:
       HOME: ${NIFI_HOME}/conf
       NIFI_WEB_PROXY_HOST: ${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}:443
-      TRUSTSTORE_PATH: ${NIFI_HOME}/security/truststore.p12
-      KEYSTORE_PATH: ${NIFI_HOME}/security/keystore.p12
+      TRUSTSTORE_PATH: ${NIFI_HOME}/security/nifi/truststore.jks
+      KEYSTORE_PATH: ${NIFI_HOME}/security/nifi/keystore.jks
       NIFI_HOME:
       INITIAL_ADMIN_IDENTITY:
       LDAP_AUTHENTICATION_STRATEGY:
@@ -23,6 +23,7 @@ services:
       TRUSTSTORE_PASSWORD:
       TRUSTSTORE_TYPE:
       AUTH:
+      NIFI_SENSITIVE_PROPS_KEY:
       NIFI_WEB_HTTPS_HOST:
       NIFI_WEB_HTTPS_PORT:
       NIFI_JVM_HEAP_INIT:
@@ -67,7 +68,7 @@ services:
           memory: ${RESOURCES_RESERVATIONS_MEMORY:-3G}
       labels:
         traefik.frontend.rule: Host:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}
-        traefik.frontend.headers.customRequestHeaders: X-ProxyScheme:https||X-ProxyHost:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}||X-ProxyPort:443||X-ProxyContextPath:/
+        traefik.frontend.headers.customRequestHeaders: X-ProxyScheme:https||X-ProxyHost:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}||X-ProxyPort:443
         traefik.frontend.redirect.regex: ^(.*://${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME})/$$
         traefik.frontend.redirect.replacement: $$1/nifi
         traefik.frontend.redirect.permanent: 'true'

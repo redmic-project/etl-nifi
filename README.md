@@ -4,31 +4,43 @@ Configuration and deployment for Apache NiFi
 
 ## Generating truststore/keystore
 
-Use [nifi-toolkit](https://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html) to generate:
+Use [nifi-toolkit](https://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html) (included in NiFi container image) to generate:
 
 ```sh
 ./bin/tls-toolkit.sh standalone \
-    --certificateAuthorityHostname ${PUBLIC_HOSTNAME} \
-    --hostnames ${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME} \
+    --hostnames ${TRAEFIK_SUBDOMAIN} \
+    --certificateAuthorityHostname ${TRAEFIK_SUBDOMAIN} \
+    --nifiDnSuffix ",${LDAP_USER_SEARCH_BASE}" \
+    --subjectAlternativeNames "localhost,0.0.0.0,${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME},${TRAEFIK_SUBDOMAIN}" \
     --days 825 \
     --keySize 4096 \
     --trustStorePassword ${TRUSTSTORE_PASSWORD} \
     --keyStorePassword ${KEYSTORE_PASSWORD} \
-    --keyPassword ${KEY_PASSWORD}
+    --keyPassword ${KEY_PASSWORD} \
+    --outputDirectory ${NIFI_HOME}/security
 ```
 
-Then, migrate from JKS (Java specific, deprecated format) to PKCS12 (generic, recommended format) using:
+If you want to generate truststore/keystore for NiFi Registry, you also have to execute:
 
 ```sh
-keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -deststoretype pkcs12
-keytool -importkeystore -srckeystore truststore.jks -destkeystore truststore.p12 -deststoretype pkcs12
+./bin/tls-toolkit.sh standalone \
+    --hostnames ${NIFI_REGISTRY_TRAEFIK_SUBDOMAIN} \
+    --certificateAuthorityHostname ${NIFI_REGISTRY_TRAEFIK_SUBDOMAIN} \
+    --nifiDnSuffix ",${LDAP_USER_SEARCH_BASE}" \
+    --subjectAlternativeNames "localhost,0.0.0.0,${NIFI_REGISTRY_TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME},${NIFI_REGISTRY_TRAEFIK_SUBDOMAIN}" \
+    --days 825 \
+    --keySize 4096 \
+    --trustStorePassword ${TRUSTSTORE_PASSWORD} \
+    --keyStorePassword ${KEYSTORE_PASSWORD} \
+    --keyPassword ${KEY_PASSWORD} \
+    --outputDirectory ${NIFI_HOME}/security
 ```
 
 You can check stores content with:
 
 ```sh
-keytool -list -v -keystore keystore.p12
-keytool -list -v -keystore truststore.p12
+keytool -list -v -keystore keystore.jks
+keytool -list -v -keystore truststore.jks
 ```
 
 ## Adding truststore/keystore to volume
@@ -42,7 +54,7 @@ In processes like `invokeHttp`, if you wish to access to an external service thr
 ```sh
 echo -n | openssl s_client -connect external_url:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/external_name.crt
 
-keytool -import -alias external_name -file /tmp/external_name.crt -keystore truststore.p12
+keytool -import -alias external_name -file /tmp/external_name.crt -keystore truststore.jks
 
 rm tmp/external_name.crt
 ```

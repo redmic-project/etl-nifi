@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.9'
 
 volumes:
   conf-vol:
@@ -6,7 +6,7 @@ volumes:
     driver: local
     driver_opts:
       type: ${VOL_TYPE}
-      o: addr=${VOL_ADDR},${VOL_OPTIONS}
+      o: addr=${VOL_ADDR},${VOL_OPTS}
       device: ${CONF_VOL_DEVICE:-:/nifi-conf-vol/}
 
   database-vol:
@@ -14,7 +14,7 @@ volumes:
     driver: local
     driver_opts:
       type: ${VOL_TYPE}
-      o: addr=${VOL_ADDR},${VOL_OPTIONS}
+      o: addr=${VOL_ADDR},${VOL_OPTS}
       device: ${DATABASE_VOL_DEVICE:-:/nifi-database-vol/}
 
   flowfile-vol:
@@ -22,7 +22,7 @@ volumes:
     driver: local
     driver_opts:
       type: ${VOL_TYPE}
-      o: addr=${VOL_ADDR},${VOL_OPTIONS}
+      o: addr=${VOL_ADDR},${VOL_OPTS}
       device: ${FLOWFILE_VOL_DEVICE:-:/nifi-flowfile-vol/}
 
   content-vol:
@@ -30,7 +30,7 @@ volumes:
     driver: local
     driver_opts:
       type: ${VOL_TYPE}
-      o: addr=${VOL_ADDR},${VOL_OPTIONS}
+      o: addr=${VOL_ADDR},${VOL_OPTS}
       device: ${CONTENT_VOL_DEVICE:-:/nifi-content-vol/}
 
   provenance-vol:
@@ -38,7 +38,7 @@ volumes:
     driver: local
     driver_opts:
       type: ${VOL_TYPE}
-      o: addr=${VOL_ADDR},${VOL_OPTIONS}
+      o: addr=${VOL_ADDR},${VOL_OPTS}
       device: ${PROVENANCE_VOL_DEVICE:-:/nifi-provenance-vol/}
 
   state-vol:
@@ -46,7 +46,7 @@ volumes:
     driver: local
     driver_opts:
       type: ${VOL_TYPE}
-      o: addr=${VOL_ADDR},${VOL_OPTIONS}
+      o: addr=${VOL_ADDR},${VOL_OPTS}
       device: ${STATE_VOL_DEVICE:-:/nifi-state-vol/}
 
   security-vol:
@@ -54,5 +54,5 @@ volumes:
     driver: local
     driver_opts:
       type: ${VOL_TYPE}
-      o: addr=${VOL_ADDR},${VOL_OPTIONS}
+      o: addr=${VOL_ADDR},${VOL_OPTS}
       device: ${SECURITY_VOL_DEVICE:-:/nifi-security-vol/}
