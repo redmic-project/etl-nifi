@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   nifi:
     image: ${IMAGE_NAME:-apache/nifi}:${IMAGE_TAG:-latest}
@@ -67,14 +65,18 @@ services:
           cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.2}'
           memory: ${RESOURCES_RESERVATIONS_MEMORY:-3G}
       labels:
-        traefik.frontend.rule: Host:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}
-        traefik.frontend.headers.customRequestHeaders: X-ProxyScheme:https||X-ProxyHost:${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}||X-ProxyPort:443
-        traefik.frontend.redirect.regex: ^(.*://${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME})/$$
-        traefik.frontend.redirect.replacement: $$1/nifi
-        traefik.frontend.redirect.permanent: 'true'
-        traefik.backend: nifi
-        traefik.protocol: https
-        traefik.port: '${NIFI_WEB_HTTPS_PORT}'
+        traefik.enable: ${TRAEFIK_ENABLE:-true}
+        traefik.http.routers.nifi.entrypoints: ${TRAEFIK_ENTRYPOINT:-http}
+        traefik.http.routers.nifi.rule: Host(`${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}`)
+        traefik.http.middlewares.nifi-redirect.redirectregex.regex: ^(.*://${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME})/$$
+        traefik.http.middlewares.nifi-redirect.redirectregex.replacement: $$1/nifi
+        traefik.http.middlewares.nifi-redirect.redirectregex.permanent: 'true'
+        traefik.http.middlewares.nifi-headers-1.headers.customrequestheaders.X-ProxyScheme: https
+        traefik.http.middlewares.nifi-headers-2.headers.customrequestheaders.X-ProxyHost: ${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}
+        traefik.http.middlewares.nifi-headers-3.headers.customrequestheaders.X-ProxyPort: 443
+        traefik.http.routers.nifi.middlewares: nifi-redirect, nifi-headers-1, nifi-headers-2, nifi-headers-3
+        traefik.http.services.nifi.loadbalancer.server.port: ${NIFI_WEB_HTTPS_PORT}
+        traefik.http.services.nifi.loadbalancer.server.scheme: https
 
 networks:
   traefik-net:
